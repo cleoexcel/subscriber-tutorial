@@ -9,3 +9,7 @@ Alamat amqp://guest:guest@localhost:5672 adalah sebuah URI (Uniform Resource Ide
 - `localhost:5672` merujuk pada alamat dan port di mana message broker AMQP (seperti RabbitMQ) mendengarkan koneksi.
 - `localhost` berarti message broker berjalan pada mesin yang sama dengan klien yang mengakses.
 - `5672` adalah nomor port default yang digunakan oleh RabbitMQ untuk menerima koneksi AMQP.
+
+# Simulation slow subscriber
+![Alt text](images/image6.jpg)
+Jumlah total pesan yang mengantri dapat dipengaruhi oleh beberapa faktor, salah satunya adalah ketika publisher mengirim pesan dengan cepat ke RabbitMQ, sehingga setiap proses pengiriman menambah panjang antrian. Sementara itu, subscriber mengonsumsi pesan dengan kecepatan yang lebih lambat karena adanya penundaan sengaja selama 1 detik per pemrosesan pesan. Penundaan ini dalam pemrosesan memungkinkan pesan untuk menumpuk dalam antrian. Jumlah queue tergantung pada berapa banyak jenis antrian yang dibuat dalam aplikasi dan bagaimana aplikasi kamu dideploy atau diuji. Pada mesin saya, hanya ada 2 karena hanya ada satu jenis pesan/event yang diproses dan satu subscriber aktif.

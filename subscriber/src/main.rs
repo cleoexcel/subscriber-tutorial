@@ -1,6 +1,6 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use crosstown_bus::{CrosstownBus, MessageHandler, HandleError};
-use std::time;
+use crosstown_bus::{CrosstownBus, HandleError, MessageHandler};
+use std::{thread, time};
 
 #[derive(Debug, Clone, BorshDeserialize, BorshSerialize)]
 pub struct UserCreatedEventMessage {
@@ -12,19 +12,22 @@ pub struct UserCreatedHandler;
 
 impl MessageHandler<UserCreatedEventMessage> for UserCreatedHandler {
     fn handle(&self, message: Box<UserCreatedEventMessage>) -> Result<(), HandleError> {
-        let _ten_millis = time::Duration::from_millis(1000);
-        let _now = time::Instant::now();
+        let ten_millis = time::Duration::from_millis(1000);
+        let now = time::Instant::now();
 
-        // thread::sleep(_ten_millis);
+        thread::sleep(ten_millis);
 
-        println!("In Cleo’s Computer [2306244886]. Message received: {:?}", message);
+        println!(
+            "In Cleo’s Computer [2306244886]. Message received: {:?}",
+            message
+        );
         Ok(())
     }
 }
 
 fn main() {
-    let listener = CrosstownBus::new_queue_listener("amqp://guest:guest@localhost:5672".to_owned())
-        .unwrap();
+    let listener =
+        CrosstownBus::new_queue_listener("amqp://guest:guest@localhost:5672".to_owned()).unwrap();
 
     _ = listener.listen(
         "user_created".to_owned(),
@@ -35,6 +38,5 @@ fn main() {
             use_dead_letter: true,
         },
     );
-
     loop {}
 }
