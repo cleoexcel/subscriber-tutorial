@@ -13,3 +13,12 @@ Alamat amqp://guest:guest@localhost:5672 adalah sebuah URI (Uniform Resource Ide
 # Simulation slow subscriber
 ![Alt text](images/image6.jpg)
 Jumlah total pesan yang mengantri dapat dipengaruhi oleh beberapa faktor, salah satunya adalah ketika publisher mengirim pesan dengan cepat ke RabbitMQ, sehingga setiap proses pengiriman menambah panjang antrian. Sementara itu, subscriber mengonsumsi pesan dengan kecepatan yang lebih lambat karena adanya penundaan sengaja selama 1 detik per pemrosesan pesan. Penundaan ini dalam pemrosesan memungkinkan pesan untuk menumpuk dalam antrian. Jumlah queue tergantung pada berapa banyak jenis antrian yang dibuat dalam aplikasi dan bagaimana aplikasi kamu dideploy atau diuji. Pada mesin saya, hanya ada 2 karena hanya ada satu jenis pesan/event yang diproses dan satu subscriber aktif.
+
+# Reflection and Running at least three subscribers
+![Alt text](images/image7.jpg)
+![Alt text](images/image8.jpg)
+![Alt text](images/image9.jpg)
+![Alt text](images/image10.jpg)
+![Alt text](images/image11.jpg)
+Ketika beberapa subscriber memproses pesan secara bersamaan, peningkatan dalam panjang antrian pesan akan berkurang lebih cepat karena adanya pemrosesan paralel dan peningkatan throughput. Dengan setiap subscriber menangani pesan secara independen, beban kerja tersebar lebih merata di seluruh sistem, mengurangi kemungkinan antrean menjadi panjang dan memungkinkan lebih banyak pesan diproses secara bersamaan.
+Pada image tersebut dapat dilihat kalau pada tiap subscriber mendapatkan data yang berbeda-beda saat publisher mengirimkan banyak data ke message queue. Ini karena tiap subscriber berfungsi seperti aplikasi nya masing-masing sehingga terpisah saat mengambil data dari message queue. Ketika data sudah terambil dari message queue, maka message akan hilang dan aplikasi lain tidak bisa menggunakannya. Selain itu, menurut saya, cara untuk meningkatkan performa dari aplikasi subscriber adalah dengan membuatnya menjadi multithreading sehingga bisa mengolah banyak event dari publisher sekaligus.
